@@ -1,40 +1,170 @@
 @font-face {
-    font-family: 'lemonmilk';
-    src: url('./fonts/lemonmilk-regular-webfont.woff2') format('woff2'),
-         url('./fonts/lemonmilk-regular-webfont.woff') format('woff');
+    font-family: 'dogfight';
+    src: url('./fonts/dogfight_italic-webfont.woff2') format('woff2'),
+         url('./fonts/dogfight_italic-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
 }
 @font-face {
-    font-family: 'roboto';
-    src: url('./fonts/roboto-regular-webfont.woff2') format('woff2'),
-         url('./fonts/roboto-regular-webfont.woff') format('woff');
+    font-family: 'bubble_gum';
+    src: url('./fonts/bubble_gum-webfont.woff2') format('woff2'),
+         url('./fonts/bubble_gum-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
 }
 @font-face {
-    font-family: 'robotobold';
-    src: url('./fonts/roboto-bold-webfont.woff2') format('woff2'),
-         url('./fonts/roboto-bold-webfont.woff') format('woff');
+    font-family: 'building_victory';
+    src: url('./fonts/buildingvictory-webfont.woff2') format('woff2'),
+         url('./fonts/buildingvictory-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 
 }
-@font-face {
-    font-family: 'lemonmilklight';
-    src: url('./fonts/lemonmilk-light-webfont.woff2') format('woff2'),
-         url('./fonts/lemonmilk-light-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
-/* lemonmilklight     lemonmilk    roboto     robotobold */
+/* dogfight     bubble_gum     building_victory */
 
 body{
     margin: 0;
     padding: 0;
     height: 100vh;
     width: 100vw;
+    background-image: url(./media/background.jpg);
+}
+*{
+    box-sizing: border-box;
+}
+
+.container{
+    display: grid;
+    grid-template-rows: min-content min-content 1fr;
+    grid-template-columns: minmax(min-content, 1fr) minmax(400px, 4fr);
+    grid-template-areas: 
+    "title title"
+    "messages messages"
+    "sidebar board";
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.title{
+    grid-area: title;
+    font-family: bubble_gum;
+    font-size: 90px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    text-shadow:
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px #fff,
+    0 0 50px #575996,
+    0 0 55px #BF5E9D,
+    0 0 60px #B7436A,
+    0 0 65px #F2CF8D,
+    0 0 70px #74BFC2;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+.messages{
+    grid-area: messages;
+    font-family: building_victory;
+    font-size: 40px;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.781);
+    padding: 10px;
+    width: 100%;
+    
+}
+.messages>span{
+    font-weight: bold;
+    text-shadow:
+    0 0 5px #ec1298,
+    0 0 10px #ec1298,
+    0 0 15px #ec1298,
+    0 0 20px #ec1298,
+    0 0 25px #ec1298,
+    0 0 30px #ec1298;
+}
+.sidebar{
+    grid-area: sidebar;
+    font-family: building_victory;
+    font-size: 40px;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.781);
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-items: center;
+    align-items: center;
+    
+}
+.player{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    align-content: center;
+}
+                                                .player1{
+                                                    font-weight: bold;
+                                                    text-shadow:
+                                                    0 0 5px #ec1298,
+                                                    0 0 10px #ec1298,
+                                                    0 0 15px #ec1298,
+                                                    0 0 20px #ec1298,
+                                                    0 0 25px #ec1298,
+                                                    0 0 30px #ec1298;
+                                                }
+                                                .player2{
+                                                    font-weight: bold;
+                                                    text-shadow:
+                                                    0 0 5px #ec1298,
+                                                    0 0 10px #ec1298,
+                                                    0 0 15px #ec1298,
+                                                    0 0 20px #ec1298,
+                                                    0 0 25px #ec1298,
+                                                    0 0 30px #ec1298;
+                                                }
+.tokens{
+    width: 40px;
+    aspect-ratio: 1/1;
+    border: 2px solid;
+}
+.vs{
+    font-family: dogfight;
+    text-shadow:
+    0 0 5px #ffffff,
+    0 0 10px #ffffff,
+    0 0 20px #f0a2a2,
+    0 0 30px #f05757;
+}
+.boardDIV{
+    grid-area: board;
+    justify-self: start;
+    align-self: start;
+    width: 99%;
+    height: 99%;
+    padding: 10px;
+
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+.board{
+    display: grid;
+    grid-template: repeat(3,minmax(100px, 1fr)) / repeat(3,minmax(100px, 1fr));
+    height: inherit;
+    max-height: 800px;
+    min-height: 300px;
+    aspect-ratio: 1/1;
+    overflow: hidden;
 }
