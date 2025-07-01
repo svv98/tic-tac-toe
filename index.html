@@ -1,47 +1,252 @@
 <!DOCTYPE html>
 <html lang="en-US">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
     <link href="style.css" rel="stylesheet">
 </head>
+
 <body>
-    <div class="container">
-        <div class="title">TIC TAC TOE</div>
-        <div class="sidebar">
-            <div class="player player1">
-                <div class="tokens tokenP1"></div>
-                <div class="names player1">PLAYER1</div>
-            </div>
-            <div class="vs">VS</div>
-            <div class="player player2">
-                <div class="tokens tokenP2"></div>
-                <div class="player2">PLAYER2</div>
-            </div>
+<div class="container">
+    <div class="title">TIC TAC TOE</div>
+    <div class="sidebar">
+        <div class="player player1">
+            <div class="tokens sbtokenP1"></div>
+            <div class="names player1">PLAYER1</div>
         </div>
-        <div class="messages"><span>PLAYER 1</span>'s TURN</div>
-        <div class="boardDIV">
-            <div class="board">
-                <button class="cell c00"></button>
-                <button class="cell c01"></button>
-                <button class="cell c02"></button>
-                <button class="cell c10"></button>
-                <button class="cell c11"></button>
-                <button class="cell c12"></button>
-                <button class="cell c20"></button>
-                <button class="cell c21"></button>
-                <button class="cell c22"></button>
-            </div>
+        <div class="vs">VS</div>
+        <div class="player player2">
+            <div class="tokens sbtokenP2"></div>
+            <div class="player2">PLAYER2</div>
         </div>
-        
     </div>
+    <div class="messages"><span>PLAYER 1</span>'s TURN</div>
+    <div class="boardDIV">
+        <div class="board">
+            <button class="cell c00"></button>
+            <button class="cell c01"></button>
+            <button class="cell c02"></button>
+            <button class="cell c10"></button>
+            <button class="cell c11"></button>
+            <button class="cell c12"></button>
+            <button class="cell c20"></button>
+            <button class="cell c21"></button>
+            <button class="cell c22"></button>
+        </div>
+    </div>
+</div>
 
+<dialog id="startGame">
+    <div class="title">TIC TAC TOE</div>
+    <form id="startForm">
+        <fieldset class="p1">
+            <legend>Player1</legend>
+            <div class="playerName">   
+                <label for="nameP1">Name</label>
+                <input type="text" id="nameP1" name="nameP1"/>
+            </div>
+            <div class="playerToken">   
+                <label for="tokenP1">Token</label>
+                <select id="tokenP1" name="tokenP1">
+                    <option></option>
+                    <optgroup label="Shapes">
+                        <option value="circle">Circle</option>
+                        <option value="cross">Cross</option>
+                        <option value="heart">Heart</option>
+                        <option value="circleFull">Circle Full</option>
+                        <option value="star">Star</option>
+                        <option value="pentagon">Pentagon</option>
+                        <option value="hexagon">Hexagon</option>
+                        <option value="cube">Cube</option>
+                    </optgroup>
+                    <optgroup label="Animals">
+                        <option value="duck">Duck</option>
+                        <option value="butterfly">Butterfly</option>
+                        <option value="dog">Dog</option>
+                        <option value="jellyfish">Jellyfish</option>
+                        <option value="bee">Bee</option>
+                        <option value="cow">Cow</option>
+                        <option value="snake">Snake</option>
+                        <option value="cat">Cat</option>
+                    </optgroup>
+                    <optgroup label="Emojis">
+                        <option value="cool">Cool Dude 8) </option>
+                        <option value="kissy">Kissy :* </option>
+                        <option value="happy">Happy :) </option>
+                        <option value="poop">Poop</option>
+                        <option value="tongue">Tongue Out :P</option>
+                        <option value="sad">Sad :( </option>
+                        <option value="devil">Devil >:) </option>
+                    </optgroup>
+                    <optgroup label="Food">
+                        <option value="cookie">Cookie</option>
+                        <option value="corn">Corn</option>
+                        <option value="apple">Apple</option>
+                        <option value="chicken">Chicken</option>
+                        <option value="cherries">Cherries</option>
+                        <option value="hamburger">Hamburger</option>
+                        <option value="icecream">Ice Cream</option>
+                    </optgroup>
+                    <optgroup label="Games">
+                        <option value="dinosaur">Dinosaur</option>
+                        <option value="wizard">Wizard Hat</option>
+                        <option value="bomb">Bomb</option>
+                        <option value="spade">Spade</option>
+                        <option value="club">Club</option>
+                        <option value="diamond">Diamond</option>
+                        <option value="ghosty">Ghosty</option>
+                        <option value="power">Power-up Mushroom</option>
+                        <option value="puzzle">Puzzle</option>
+                        <option value="spaceinvaders">Space Invaders</option>
+                    </optgroup>
+                    <optgroup label="Music">
+                        <option value="vinil">Vinil</option>
+                        <option value="notes">Musical Notes</option>
+                        <option value="note">Musical Note</option>
+                    </optgroup>
+                    <optgroup label="Nature">
+                        <option value="flower">Flower</option>
+                        <option value="tulip">Tulip</option>
+                        <option value="snowflake">Snowflake</option>
+                        <option value="christmas">Christmas Tree</option>
+                        <option value="moon">Moon & Stars</option>
+                        <option value="cactus">Cactus</option>
+                        <option value="sun">Sun</option>
+                    </optgroup>
+                    <optgroup label="Sports">
+                        <option value="ball">8 Ball</option>
+                        <option value="bullseye">Bullseye</option>
+                        <option value="american">American Football</option>
+                        <option value="tennis">Tennis</option>
+                        <option value="baseball">Baseball</option>
+                        <option value="football">Football Soccer</option>
+                        <option value="volleyball">Volleyball</option>
+                        <option value="basketball">Basketball</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="playerColor">
+                <label for="colorP1">Color</label>
+                <input type='color' id="colorP1" name="colorP1"/>
+            </div>
+            <div class="viewToken viewTokenP1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <g class="svgOutline" stroke-width="4">
+                        <path d="M16 13H15.5C14.8 11.7 14.3 10 13.8 8.3L14.7 9.2C17.4 11.3 19.8 10.9 19.8 10.9S20.5 7.1 17.8 5.1C15.5 3.3 13.4 3.3 12.8 3.4C12.7 2.8 12.7 2.3 12.6 1.9L11.2 2C11.2 5.2 8.5 11.1 7.6 13C5.6 13.2 4 14.9 4 17C4 19.2 5.8 21 8 21C9.1 21 10 20.6 10.7 19.9C10.3 19 10 18 10 17S10.3 15 10.7 14.1C10.3 13.7 9.7 13.4 9.2 13.2C9.9 11.7 11.1 9 11.9 6.4C12.3 8.7 13.1 11.4 14.1 13.5C12.9 14.2 12 15.5 12 17C12 19.2 13.8 21 16 21S20 19.2 20 17 18.2 13 16 13M8 15.5C7.2 15.5 6.5 16.2 6.5 17H5.5C5.5 15.6 6.6 14.5 8 14.5V15.5M16 15.5C15.2 15.5 14.5 16.2 14.5 17H13.5C13.5 15.6 14.6 14.5 16 14.5V15.5Z" />
+                    </g>
+                    <g>
+                        <path d="M16 13H15.5C14.8 11.7 14.3 10 13.8 8.3L14.7 9.2C17.4 11.3 19.8 10.9 19.8 10.9S20.5 7.1 17.8 5.1C15.5 3.3 13.4 3.3 12.8 3.4C12.7 2.8 12.7 2.3 12.6 1.9L11.2 2C11.2 5.2 8.5 11.1 7.6 13C5.6 13.2 4 14.9 4 17C4 19.2 5.8 21 8 21C9.1 21 10 20.6 10.7 19.9C10.3 19 10 18 10 17S10.3 15 10.7 14.1C10.3 13.7 9.7 13.4 9.2 13.2C9.9 11.7 11.1 9 11.9 6.4C12.3 8.7 13.1 11.4 14.1 13.5C12.9 14.2 12 15.5 12 17C12 19.2 13.8 21 16 21S20 19.2 20 17 18.2 13 16 13M8 15.5C7.2 15.5 6.5 16.2 6.5 17H5.5C5.5 15.6 6.6 14.5 8 14.5V15.5M16 15.5C15.2 15.5 14.5 16.2 14.5 17H13.5C13.5 15.6 14.6 14.5 16 14.5V15.5Z" />
+                    </g>
+                </svg>
+            </div>
+        </fieldset>
+        <fieldset class="p2">
+            <legend>Player2</legend>
+            <div class="playerName">   
+                <label for="nameP2">Name</label>
+                <input type="text" id="nameP2" name="nameP2"/>
+            </div>
+            <div class="playerToken">   
+                <label for="tokenP2">Token</label>
+                <select id="tokenP2" name="tokenP2">
+                    <option></option>
+                    <optgroup label="Shapes">
+                        <option value="circle">Circle</option>
+                        <option value="cross">Cross</option>
+                        <option value="heart">Heart</option>
+                        <option value="circleFull">Circle Full</option>
+                        <option value="star">Star</option>
+                        <option value="pentagon">Pentagon</option>
+                        <option value="hexagon">Hexagon</option>
+                        <option value="cube">Cube</option>
+                    </optgroup>
+                    <optgroup label="Animals">
+                        <option value="duck">Duck</option>
+                        <option value="butterfly">Butterfly</option>
+                        <option value="dog">Dog</option>
+                        <option value="jellyfish">Jellyfish</option>
+                        <option value="bee">Bee</option>
+                        <option value="cow">Cow</option>
+                        <option value="snake">Snake</option>
+                        <option value="cat">Cat</option>
+                    </optgroup>
+                    <optgroup label="Emojis">
+                        <option value="cool">Cool Dude 8) </option>
+                        <option value="kissy">Kissy :* </option>
+                        <option value="happy">Happy :) </option>
+                        <option value="poop">Poop</option>
+                        <option value="tongue">Tongue Out :P</option>
+                        <option value="sad">Sad :( </option>
+                        <option value="devil">Devil >:) </option>
+                    </optgroup>
+                    <optgroup label="Food">
+                        <option value="cookie">Cookie</option>
+                        <option value="corn">Corn</option>
+                        <option value="apple">Apple</option>
+                        <option value="chicken">Chicken</option>
+                        <option value="cherries">Cherries</option>
+                        <option value="hamburger">Hamburger</option>
+                        <option value="icecream">Ice Cream</option>
+                    </optgroup>
+                    <optgroup label="Games">
+                        <option value="dinosaur">Dinosaur</option>
+                        <option value="wizard">Wizard Hat</option>
+                        <option value="bomb">Bomb</option>
+                        <option value="spade">Spade</option>
+                        <option value="club">Club</option>
+                        <option value="diamond">Diamond</option>
+                        <option value="ghosty">Ghosty</option>
+                        <option value="power">Power-up Mushroom</option>
+                        <option value="puzzle">Puzzle</option>
+                        <option value="spaceinvaders">Space Invaders</option>
+                    </optgroup>
+                    <optgroup label="Music">
+                        <option value="vinil">Vinil</option>
+                        <option value="notes">Musical Notes</option>
+                        <option value="note">Musical Note</option>
+                    </optgroup>
+                    <optgroup label="Nature">
+                        <option value="flower">Flower</option>
+                        <option value="tulip">Tulip</option>
+                        <option value="snowflake">Snowflake</option>
+                        <option value="christmas">Christmas Tree</option>
+                        <option value="moon">Moon & Stars</option>
+                        <option value="cactus">Cactus</option>
+                        <option value="sun">Sun</option>
+                    </optgroup>
+                    <optgroup label="Sports">
+                        <option value="ball">8 Ball</option>
+                        <option value="bullseye">Bullseye</option>
+                        <option value="american">American Football</option>
+                        <option value="tennis">Tennis</option>
+                        <option value="baseball">Baseball</option>
+                        <option value="football">Football Soccer</option>
+                        <option value="volleyball">Volleyball</option>
+                        <option value="basketball">Basketball</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="playerColor">
+                <label for="colorP2">Color</label>
+                <input type='color' id="colorP2" name="colorP2"/>
+            </div>
+            <div class="viewToken viewTokenP2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <g class="svgOutline" stroke-width="4">
+                        <path d="M16 13H15.5C14.8 11.7 14.3 10 13.8 8.3L14.7 9.2C17.4 11.3 19.8 10.9 19.8 10.9S20.5 7.1 17.8 5.1C15.5 3.3 13.4 3.3 12.8 3.4C12.7 2.8 12.7 2.3 12.6 1.9L11.2 2C11.2 5.2 8.5 11.1 7.6 13C5.6 13.2 4 14.9 4 17C4 19.2 5.8 21 8 21C9.1 21 10 20.6 10.7 19.9C10.3 19 10 18 10 17S10.3 15 10.7 14.1C10.3 13.7 9.7 13.4 9.2 13.2C9.9 11.7 11.1 9 11.9 6.4C12.3 8.7 13.1 11.4 14.1 13.5C12.9 14.2 12 15.5 12 17C12 19.2 13.8 21 16 21S20 19.2 20 17 18.2 13 16 13M8 15.5C7.2 15.5 6.5 16.2 6.5 17H5.5C5.5 15.6 6.6 14.5 8 14.5V15.5M16 15.5C15.2 15.5 14.5 16.2 14.5 17H13.5C13.5 15.6 14.6 14.5 16 14.5V15.5Z" />
+                    </g>
+                    <g>
+                        <path d="M16 13H15.5C14.8 11.7 14.3 10 13.8 8.3L14.7 9.2C17.4 11.3 19.8 10.9 19.8 10.9S20.5 7.1 17.8 5.1C15.5 3.3 13.4 3.3 12.8 3.4C12.7 2.8 12.7 2.3 12.6 1.9L11.2 2C11.2 5.2 8.5 11.1 7.6 13C5.6 13.2 4 14.9 4 17C4 19.2 5.8 21 8 21C9.1 21 10 20.6 10.7 19.9C10.3 19 10 18 10 17S10.3 15 10.7 14.1C10.3 13.7 9.7 13.4 9.2 13.2C9.9 11.7 11.1 9 11.9 6.4C12.3 8.7 13.1 11.4 14.1 13.5C12.9 14.2 12 15.5 12 17C12 19.2 13.8 21 16 21S20 19.2 20 17 18.2 13 16 13M8 15.5C7.2 15.5 6.5 16.2 6.5 17H5.5C5.5 15.6 6.6 14.5 8 14.5V15.5M16 15.5C15.2 15.5 14.5 16.2 14.5 17H13.5C13.5 15.6 14.6 14.5 16 14.5V15.5Z" />
+                    </g>
+                </svg>
+            </div>
+        </fieldset>
+        <button class="startGameButton" type="submit">READY TO PLAY!</button>
+    </form>
+</dialog>
 
-
-    <dialog id="startGame">
-
-    </dialog>
 <script src="javascript.js"></script>
 </body>
 </html>
