@@ -464,12 +464,13 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     ;
 }
 
+
 #gameOver{
     width: 60%;
     min-width: 500px;
     height: fit-content;
     max-height: 90%;
-    background-color: rgb(7, 10, 15);
+    background-color: rgba(7, 10, 15, 0.8);
     border: none;
     color: white;
     box-sizing: border-box;
@@ -542,7 +543,7 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     max-width: 90%; 
     height: auto;
     z-index: 2;
-    opacity: 0.7;
+    opacity: 0.8;
 }
 .loserToken>svg{
     width: 100%;
@@ -589,7 +590,7 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     position: absolute;
     top: 0;
@@ -673,3 +674,112 @@ input[type="color"]::-webkit-color-swatch-wrapper {
         0 0 10px 2px rgb(209, 5, 5)
     ;
 }
+
+
+#gameOverTie{
+    width: 60%;
+    min-width: 500px;
+    height: fit-content;
+    max-height: 90%;
+    background-color: rgba(7, 10, 15, 0.8);
+    border: none;
+    color: white;
+    
+    display: grid;
+    grid-template-rows: min-content min-content 1fr min-content;
+    justify-content: center;
+    align-content: center;
+    gap: 10px;
+}
+#gameOverTie::backdrop{
+    background-color: rgba(0, 0, 0, 0.432);
+}
+#gameOverTie:not([open]) {
+  display: none;
+}
+.tieText{
+    font-family: building_victory;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 5px;
+    text-shadow: 
+        0 0 5px rgb(143, 139, 139),
+        0 0 10px rgb(143, 139, 139),
+        0 0 15px rgb(143, 139, 139)
+    ;
+    line-height: 0.3;
+    margin-top: 25px;
+}
+.tieText>span{
+    font-family: roboto;
+    font-size: 15px;
+    letter-spacing: 0;
+    color: rgba(255, 255, 255, 0.137);
+    text-shadow: none;
+    font-weight: bold;
+}
+#gameOverTie>.results{
+    grid-row: 3/4;
+    width: 100%;
+    height: fit-content;
+    display: grid;
+    grid-template-columns: minmax(min-content, 1fr) 2fr 1fr;
+    grid-template-rows: min-content;
+}
+.tiePic{
+    grid-column: 2/3;
+    width: 100%;
+    margin-top: 20px;
+
+}
+.tiePic>img{
+    width: 100%;
+}
+.tieP1{
+    grid-column: 1/2;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: -20px;
+}
+.tieP1Token{
+    width: 90%;
+    display: flex;
+    justify-content: end;
+}
+.tieP1Token>svg{
+   width: 100%;
+}
+.tieP1Name, .tieP2Name{
+    width: 90%;
+    align-self: center;
+    text-align: center;
+    color: white;
+    font-size: 30px;
+    font-family: building_victory;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.tieP2{
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: -20px;
+}
+.tieP2Token{
+    width: 90%;
+    display: flex;
+    justify-content: start;
+}
+.tieP2Token>svg{
+   width: 100%;
+}
+#gameOverTie .restartBtn{
+    grid-row: 4/5;
+}
+    

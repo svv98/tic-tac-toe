@@ -10,9 +10,10 @@ const documentVariables = (function(){
   const formColorP2 = document.getElementById('colorP2');
   const formViewTokenP2 = document.querySelector('.viewTokenP2');
 
-  const gameOverModal = document.querySelector('#gameOver');
+  const gameOverWinnerModal = document.querySelector('#gameOver');
+  const gameOverTieModal = document.querySelector('#gameOverTie');
 
-  return {startGameModal, startGameForm, formTokenP1, formColorP1, formViewTokenP1, formTokenP2, formColorP2, formViewTokenP2, gameOverModal}
+  return {startGameModal, startGameForm, formTokenP1, formColorP1, formViewTokenP1, formTokenP2, formColorP2, formViewTokenP2, gameOverWinnerModal, gameOverTieModal}
 })();
 
 const variousFunctions = (function(){
@@ -275,20 +276,42 @@ const variousFunctions = (function(){
   
     doms.winnerToken.innerHTML = tokenIcons(winner.token);
     let winnerSVG = document.querySelector('.winnerToken>svg');
-    winnerSVG.removeChild(document.querySelector('.winnerToken .svgOutline'));
+    let winnerOutline = document.querySelector('.winnerToken .svgOutline');
     winnerSVG.setAttribute('style',`fill:${winner.color}; stroke:${winner.color};`);
-    if(winner.token == 'cross') winnerSVG.setAttribute('stroke-width','50');
-    else winnerSVG.setAttribute('stroke-width','2');
+    if(winner.token == 'cross') winnerOutline.setAttribute('stroke-width','50');
+    else winnerOutline.setAttribute('stroke-width','3');
 
     doms.loserToken.innerHTML = tokenIcons(loser.token);
     let loserSVG = document.querySelector('.loserToken>svg');
-    loserSVG.removeChild(document.querySelector('.loserToken .svgOutline'));
+    let loserOutline = document.querySelector('.loserToken .svgOutline');
     loserSVG.setAttribute('style',`fill:${loser.color}; stroke:${loser.color};`);
-    if(loser.token == 'cross') loserSVG.setAttribute('stroke-width','50');
-    else loserSVG.setAttribute('stroke-width','2');
+    if(loser.token == 'cross') loserOutline.setAttribute('stroke-width','50');
+    else loserOutline.setAttribute('stroke-width','3');
 
   }
-  return {previewPlayers, changeStartColor, changeStartToken, gameInfoUpdate, turnMessages, changeCell, winnerIndicator, winnerModal}
+
+  let tieModal = function(player1, player2){
+    doms.tieP1Name.textContent = player1.name;
+    doms.tieP1Name.setAttribute('style',`text-shadow: 0 0 5px ${player1.color}, 0 0 10px ${player1.color}, 0 0 15px ${player1.color}, 0 0 20px ${player1.color}, 0 0 25px ${player1.color}, 0 0 30px ${player1.color};`);
+    doms.tieP2Name.textContent = player2.name;
+    doms.tieP2Name.setAttribute('style',`text-shadow: 0 0 5px ${player2.color}, 0 0 10px ${player2.color}, 0 0 15px ${player2.color}, 0 0 20px ${player2.color}, 0 0 25px ${player2.color}, 0 0 30px ${player2.color};`);
+  
+    doms.tieP1Token.innerHTML = tokenIcons(player1.token);
+    let tieP1SVG = document.querySelector('.tieP1Token>svg');
+    let tieP1Outline = document.querySelector('.tieP1Token .svgOutline');
+    tieP1SVG.setAttribute('style',`fill:${player1.color}; stroke:${player1.color};`);
+    if(player1.token == 'cross') tieP1Outline.setAttribute('stroke-width','50');
+    else tieP1Outline.setAttribute('stroke-width','3');
+
+    doms.tieP2Token.innerHTML = tokenIcons(player2.token);
+    let tieP2SVG = document.querySelector('.tieP2Token>svg');
+    let tieP2Outline = document.querySelector('.tieP2Token .svgOutline');
+    tieP2SVG.setAttribute('style',`fill:${player2.color}; stroke:${player2.color};`);
+    if(player2.token == 'cross') tieP2Outline.setAttribute('stroke-width','50');
+    else tieP2Outline.setAttribute('stroke-width','3');
+  }
+
+  return {previewPlayers, changeStartColor, changeStartToken, gameInfoUpdate, turnMessages, changeCell, winnerIndicator, winnerModal, tieModal}
 })();
 
 const doms = (function(){
@@ -307,11 +330,15 @@ const doms = (function(){
 
   const winnerName = document.querySelector('.winnerName>span');
   const loserName = document.querySelector('.loserName>span');
-
   const winnerToken = document.querySelector('.winnerToken');
   const loserToken = document.querySelector('.loserToken');
 
-  return {viewTokenP1, viewTokenP2, sbtokenP1, sbtokenP2, player1, player2, messages, board, winnerName, loserName, winnerToken, loserToken}
+  const tieP1Name = document.querySelector('.tieP1Name');
+  const tieP2Name = document.querySelector('.tieP2Name');
+  const tieP1Token = document.querySelector('.tieP1Token');
+  const tieP2Token = document.querySelector('.tieP2Token');
+  
+  return {viewTokenP1, viewTokenP2, sbtokenP1, sbtokenP2, player1, player2, messages, board, winnerName, loserName, winnerToken, loserToken, tieP1Name, tieP2Name, tieP1Token, tieP2Token}
 })();
 
 const checkStart = (function(){
@@ -362,6 +389,18 @@ const events = (function(){
         }
       }
     }); 
+
+    documentVariables.gameOverWinnerModal.addEventListener('click', (event)=>{
+      if(event.target.closest('.restart')){
+        window.location.reload()
+      }
+    });
+
+    documentVariables.gameOverTieModal.addEventListener('click', (event)=>{
+      if(event.target.closest('.restart')){
+        window.location.reload()
+      }
+    });
   });
 
   documentVariables.startGameForm.addEventListener('submit', function(event){
@@ -441,10 +480,10 @@ function gameController(player1, player2){
       if(win){
         checkStart.gameFinsished();
         let otherPlayer = (currentPlayer==player1)? player2 : player1;
-        gameOver(win, otherPlayer);
+        gameOver(false, win, otherPlayer);
       }
       else if(counter==9){
-        gameOver();
+        gameOver(true, player1, player2);
       }
       else changePlayer();
     }
@@ -519,13 +558,15 @@ function gameController(player1, player2){
   return {round}
 };
 
-function gameOver(winner, otherPlayer){
-  documentVariables.gameOverModal.showModal()
-  if(winner){
-    variousFunctions.winnerModal(winner, otherPlayer);
+function gameOver(tie, winnerORplayer1, otherPlayer){
+  
+  if(tie===false){
+    documentVariables.gameOverWinnerModal.showModal();
+    variousFunctions.winnerModal(winnerORplayer1, otherPlayer);
   }
   else {
-    // alert("GAME OVER \n IT'S A TIE!");
+    documentVariables.gameOverTieModal.showModal();
+    variousFunctions.tieModal(winnerORplayer1, otherPlayer);
   }
 
 };
