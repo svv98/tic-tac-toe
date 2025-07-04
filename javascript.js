@@ -10,7 +10,9 @@ const documentVariables = (function(){
   const formColorP2 = document.getElementById('colorP2');
   const formViewTokenP2 = document.querySelector('.viewTokenP2');
 
-  return {startGameModal, startGameForm, formTokenP1, formColorP1, formViewTokenP1, formTokenP2, formColorP2, formViewTokenP2}
+  const gameOverModal = document.querySelector('#gameOver');
+
+  return {startGameModal, startGameForm, formTokenP1, formColorP1, formViewTokenP1, formTokenP2, formColorP2, formViewTokenP2, gameOverModal}
 })();
 
 const variousFunctions = (function(){
@@ -251,9 +253,42 @@ const variousFunctions = (function(){
   let changeCell = function(row, col, player){
     let cell = document.getElementById(`c${row}${col}`);
     cell.innerHTML=tokenIcons(player.token);
-    cell.setAttribute('style',`fill: ${player.color}`);
+    let cellToken = document.querySelector(`#c${row}${col}>svg`)
+    cellToken.setAttribute('fill',`${player.color}`);
   }
-  return {previewPlayers, changeStartColor, changeStartToken, gameInfoUpdate, turnMessages, changeCell}
+
+  let winnerIndicator = function(cells, color){
+    for(let cell of cells){
+      document.querySelector(`#${cell}`).setAttribute('style', `box-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 50px ${color}, 0 0 55px  ${color}, 0 0 60px  ${color}, 0 0 65px  ${color}, 0 0 70px  ${color};`);
+      
+    }
+    // let cell1 = document.querySelector(`#${cells[0]}`);
+    // let cell2 = document.querySelector(`#${cells[1]}`);
+    // let cell3 = document.querySelector(`#${cells[2]}`);    
+  }
+
+  let winnerModal = function(winner, loser){
+    doms.winnerName.textContent = winner.name;
+    doms.winnerName.setAttribute('style',`text-shadow: 0 0 5px ${winner.color}, 0 0 10px ${winner.color}, 0 0 15px ${winner.color}, 0 0 20px ${winner.color}, 0 0 25px ${winner.color}, 0 0 30px ${winner.color};`);
+    doms.loserName.textContent = loser.name;
+    doms.loserName.setAttribute('style',`text-shadow: 0 0 5px ${loser.color}, 0 0 10px ${loser.color}, 0 0 15px ${loser.color}, 0 0 20px ${loser.color}, 0 0 25px ${loser.color}, 0 0 30px ${loser.color};`);
+  
+    doms.winnerToken.innerHTML = tokenIcons(winner.token);
+    let winnerSVG = document.querySelector('.winnerToken>svg');
+    winnerSVG.removeChild(document.querySelector('.winnerToken .svgOutline'));
+    winnerSVG.setAttribute('style',`fill:${winner.color}; stroke:${winner.color};`);
+    if(winner.token == 'cross') winnerSVG.setAttribute('stroke-width','50');
+    else winnerSVG.setAttribute('stroke-width','2');
+
+    doms.loserToken.innerHTML = tokenIcons(loser.token);
+    let loserSVG = document.querySelector('.loserToken>svg');
+    loserSVG.removeChild(document.querySelector('.loserToken .svgOutline'));
+    loserSVG.setAttribute('style',`fill:${loser.color}; stroke:${loser.color};`);
+    if(loser.token == 'cross') loserSVG.setAttribute('stroke-width','50');
+    else loserSVG.setAttribute('stroke-width','2');
+
+  }
+  return {previewPlayers, changeStartColor, changeStartToken, gameInfoUpdate, turnMessages, changeCell, winnerIndicator, winnerModal}
 })();
 
 const doms = (function(){
@@ -270,7 +305,21 @@ const doms = (function(){
 
   const board = document.querySelector('.board');
 
-  return {viewTokenP1, viewTokenP2, sbtokenP1, sbtokenP2, player1, player2, messages, board}
+  const winnerName = document.querySelector('.winnerName>span');
+  const loserName = document.querySelector('.loserName>span');
+
+  const winnerToken = document.querySelector('.winnerToken');
+  const loserToken = document.querySelector('.loserToken');
+
+  return {viewTokenP1, viewTokenP2, sbtokenP1, sbtokenP2, player1, player2, messages, board, winnerName, loserName, winnerToken, loserToken}
+})();
+
+const checkStart = (function(){
+  let gameStart = false;
+  let gameStarted = ()=> gameStart = true;
+  let gameFinsished = ()=> gameStart = false;
+  let checkGameStart = ()=> gameStart;
+  return {gameStarted, gameFinsished, checkGameStart}
 })();
 
 documentVariables.startGameModal.showModal();
@@ -300,13 +349,16 @@ const events = (function(){
 
     doms.board.addEventListener("mousedown", (event) => {
       if(event.target.closest(".cell")){
-        let selectedCell = event.target.closest(".cell");
-        let cellID = selectedCell.getAttribute('id').split('').slice(1,3);
-        let controller = playGame.getGameController();
-        if(controller){
-          controller.round(cellID[0], cellID[1]);
-        } else {
-          console.log("Game not started yet");
+        if(checkStart.checkGameStart() === true){
+          let selectedCell = event.target.closest(".cell");
+          let cellID = selectedCell.getAttribute('id').split('').slice(1,3);
+          let controller = playGame.getGameController();
+            if(controller){
+              controller.round(cellID[0], cellID[1]);
+            } 
+        }
+        else{
+          console.log('RESTART GAME TO PLAY PLS!');
         }
       }
     }); 
@@ -327,12 +379,12 @@ const events = (function(){
 
     documentVariables.startGameModal.close();
 
+    checkStart.gameStarted();
     variousFunctions.gameInfoUpdate(player1, player2);
     playGame.getPlayers(player1, player2);
   });
   
 })();
-
 
 const playGame= (function(){
   let game;
@@ -382,17 +434,19 @@ function gameController(player1, player2){
 
     if(change === true){
       variousFunctions.changeCell(row, col, currentPlayer);
-      changePlayer();
  
       let counter=roundCounter();
       
       let win = winCheck();
       if(win){
-      gameOver(win.name);
+        checkStart.gameFinsished();
+        let otherPlayer = (currentPlayer==player1)? player2 : player1;
+        gameOver(win, otherPlayer);
       }
       else if(counter==9){
         gameOver();
       }
+      else changePlayer();
     }
   }; 
 
@@ -404,20 +458,57 @@ function gameController(player1, player2){
 
   const winCheck = () => {
     let winningChances = [
-      board[0][0]+board[0][1]+board[0][2], board[1][0]+board[1][1]+board[1][2], board[2][0]+board[2][1]+board[2][2], 
-      board[0][0]+board[1][0]+board[2][0], board[0][1]+board[1][1]+board[2][1], board[0][2]+board[1][2]+board[2][2],
-      board[0][0]+board[1][1]+board[2][2], board[0][2]+board[1][1]+board[2][0]
+      [0, board[0][0]+board[0][1]+board[0][2]], [1, board[1][0]+board[1][1]+board[1][2]], [2, board[2][0]+board[2][1]+board[2][2]], 
+      [3, board[0][0]+board[1][0]+board[2][0]], [4, board[0][1]+board[1][1]+board[2][1]], [5, board[0][2]+board[1][2]+board[2][2]],
+      [6, board[0][0]+board[1][1]+board[2][2]], [7, board[0][2]+board[1][1]+board[2][0]]
     ];
     let win1=player1.token+player1.token+player1.token;
     let win2=player2.token+player2.token+player2.token;
+    let winner, winLine;
     for (let chance of winningChances){
-      if(chance === win1){
-        return player1
+      if(chance[1] === win1){
+        winLine = chance[0];
+        winner = player1;
+        break;
       }
-      else if (chance === win2){
-        return player2
+      else if (chance[1] === win2){
+        winLine = chance[0];
+        winner = player2;
+        break;
       }
     }
+
+    if(winLine!==undefined){
+      let cells;
+      switch (winLine){
+        case 0:
+          cells = ['c00', 'c01', 'c02'];
+        break;
+        case 1:
+          cells = ['c10', 'c11', 'c12'];
+        break;
+        case 2:
+          cells = ['c20', 'c21', 'c22'];
+        break;
+        case 3:
+          cells = ['c00', 'c10', 'c20'];
+        break;
+        case 4:
+          cells = ['c01', 'c11', 'c21'];
+        break;
+        case 5:
+          cells = ['c02', 'c12', 'c22'];
+        break;
+        case 6:
+          cells = ['c00', 'c11', 'c22'];
+        break;
+        case 7:
+          cells = ['c02', 'c11', 'c20'];          
+        break;
+      }
+      variousFunctions.winnerIndicator(cells, currentPlayer.color);
+    }
+    return winner
   };
 
   const roundCounter = ()=>{
@@ -428,11 +519,13 @@ function gameController(player1, player2){
   return {round}
 };
 
-function gameOver(winner){
+function gameOver(winner, otherPlayer){
+  documentVariables.gameOverModal.showModal()
   if(winner){
-    alert('GAME OVER \n CONGRATS ' + winner.toUpperCase() + '!!!');
+    variousFunctions.winnerModal(winner, otherPlayer);
   }
   else {
-    alert("GAME OVER \n IT'S A TIE!");
+    // alert("GAME OVER \n IT'S A TIE!");
   }
+
 };
