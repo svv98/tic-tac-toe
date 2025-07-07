@@ -3,3 +3,4 @@ Project for the Factory Functions and the Module Pattern Lesson on the JavaScrip
 The goal is making a Tic Tac Toe game you can play in browser.
 
 Live Demo: 
+https://svv98.github.io/tic-tac-toe/
